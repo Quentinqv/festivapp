@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import '../styles/globals.css'
+import { UserProvider } from '@auth0/nextjs-auth0';
 
 function MyApp({ Component, pageProps }) {
   return (
@@ -51,7 +52,9 @@ function MyApp({ Component, pageProps }) {
         <link rel='apple-touch-startup-image' href='/images/apple_splash_750.png' sizes='750x1334' />
         <link rel='apple-touch-startup-image' href='/images/apple_splash_640.png' sizes='640x1136' /> */}
       </Head>
-      <Component {...pageProps} />
+      <UserProvider>
+        <Component {...pageProps} />
+      </UserProvider>
     </>
   )
 }
