@@ -1,8 +1,11 @@
 import Head from 'next/head'
+import Navbar from '../components/Navbar'
 import '../styles/globals.css'
-import { UserProvider } from '@auth0/nextjs-auth0';
+import "../components/Button.css"
+import "../components/Navbar.css"
+import { SessionProvider } from 'next-auth/react'
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   return (
     <>
       <Head>
@@ -52,9 +55,10 @@ function MyApp({ Component, pageProps }) {
         <link rel='apple-touch-startup-image' href='/images/apple_splash_750.png' sizes='750x1334' />
         <link rel='apple-touch-startup-image' href='/images/apple_splash_640.png' sizes='640x1136' /> */}
       </Head>
-      <UserProvider>
+      <SessionProvider session={session}>
+        <Navbar />
         <Component {...pageProps} />
-      </UserProvider>
+      </SessionProvider>
     </>
   )
 }
