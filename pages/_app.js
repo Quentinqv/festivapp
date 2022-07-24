@@ -4,6 +4,8 @@ import '../styles/globals.css'
 import "../components/Button.css"
 import "../components/Navbar.css"
 import { SessionProvider } from 'next-auth/react'
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   return (
@@ -57,6 +59,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
       <SessionProvider session={session}>
         <Navbar />
         <Component {...pageProps} />
+        <ToastContainer />
       </SessionProvider>
     </>
   )

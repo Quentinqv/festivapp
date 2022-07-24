@@ -5,8 +5,19 @@ import Button from "../components/Button"
 import styles from "../styles/Signin.module.css"
 import logo_white from "../images/logo_white.svg"
 import deco from "../images/deco.png"
+import { toast } from 'react-toastify';
+import { useRouter } from "next/router"
 
 const Signin = ({ csrfToken, providers }) => {
+  const router = useRouter()
+  
+  const error = router.query.error
+  if (error == 'CredentialsSignin') {
+    toast.error("Invalid credentials", {
+      theme: "colored",
+    });
+  }
+
   return (
     <div className={styles.container} style={{backgroundImage: `url(${deco.src})`}}>
       <div style={{textAlign: "center"}}>
