@@ -17,11 +17,11 @@ const Signin = ({ csrfToken, providers }) => {
         <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
         <label>
           Nom d'utilisateur
-          <input name="username" type="text" placeholder="Votre nom d'utilisateur"/>
+          <input name="username" type="text" placeholder="Votre nom d'utilisateur" autoComplete="username"/>
         </label>
         <label>
           Mot de passe
-          <input name="password" type="password" placeholder="Votre mot de passe"/>
+          <input name="password" type="password" placeholder="Votre mot de passe" autoComplete="current-password"/>
         </label>
         <Button type="submit" text="Connexion" style={{ fontSize: "18px", fontWeight: "700" }}/>
       </form>
