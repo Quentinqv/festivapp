@@ -27,7 +27,7 @@
 }
 
 
-html {
+:root {
   /* Variables */
   --color-primary: #1D1443;
   --color-secondary: #5A50FC;
@@ -73,4 +73,12 @@ h3 {
   font-family: 'Montserrat', sans-serif;
   font-weight: 900;
   font-size: 16px;
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: var(--color-secondary) solid 2px;
+}
+
+input, textarea, select {
+  color: var(--color-font-primary);
 }

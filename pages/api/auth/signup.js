@@ -23,7 +23,6 @@ export default async function Signup(req, res) {
           res.status(200).json(user)
         } catch (e) {
           if (e instanceof Prisma.PrismaClientKnownRequestError) {
-            // The .code property can be accessed in a type-safe manner
             if (e.code === "P2002") {
               res.status(500).send({ error: `${e.meta.target} is already in use.` })
             }
