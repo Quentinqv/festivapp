@@ -8,6 +8,7 @@ export default async function Signup(req, res) {
     // save the user
     const saltRounds = 10
     
+    req.body = JSON.parse(req.body)
     bcrypt.hash(req.body.password, saltRounds, async function (err, hash) {
         try {
           const user = await prisma.users.create({
@@ -22,6 +23,7 @@ export default async function Signup(req, res) {
 
           res.status(200).json(user)
         } catch (e) {
+          // throw e
           if (e instanceof Prisma.PrismaClientKnownRequestError) {
             if (e.code === "P2002") {
               res.status(500).send({ error: `${e.meta.target} is already in use.` })

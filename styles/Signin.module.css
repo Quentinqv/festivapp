@@ -38,3 +38,26 @@
   color: rgba(252, 252, 252, 0.4);
   font-style: italic;
 }
+
+.roles {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.roles input {
+  display: none;
+}
+
+.role {
+  flex: 1 0 0;
+  background-color: var(--color-secondary);
+  border-radius: 5px;
+  text-align: center;
+  padding: 10px 20px;
+}
+
+.roles input:checked + .role {
+  background-color: var(--color-tertiary);
+}

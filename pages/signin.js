@@ -18,6 +18,13 @@ const Signin = ({ csrfToken, providers }) => {
     });
   }
 
+  const userCreated = router.query.userCreated
+  if (userCreated == 'true') {
+    toast.success("Votre compte a été créé avec succès", {
+      theme: "colored",
+    });
+  }
+
   return (
     <div className={styles.container} style={{backgroundImage: `url(${deco.src})`}}>
       <div style={{textAlign: "center"}}>
