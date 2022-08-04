@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 import Image from "next/image"
 import styles from "../styles/Signin.module.css"
-import Button from "../components/Button"
+import { Button } from "../components/global"
 import logo_white from "../images/logo_white.svg"
 import deco from "../images/deco.png"
 import { toast } from 'react-toastify';

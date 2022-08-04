@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 import { signIn, getCsrfToken, getProviders } from "next-auth/react"
 import Image from "next/image"
-import Button from "../components/Button"
+import { Button } from "../components/global.js"
 import styles from "../styles/Signin.module.css"
 import logo_white from "../images/logo_white.svg"
 import deco from "../images/deco.png"
@@ -43,13 +43,13 @@ const Signin = ({ csrfToken, providers }) => {
         </label>
         <Button type="submit" text="Connexion" style={{ fontSize: "18px", fontWeight: "700" }}/>
       </form>
-      <hr />
+      {/* <hr />
       {providers &&
         Object.values(providers).map((provider) => (
           <div key={provider.name} style={{ marginBottom: 0 }}>
             <Button onClick={() => signIn(provider.id)} text={`Sign in with ${provider.name}`} style={{backgroundColor: "var(--color-quaternary)"}} />
           </div>
-        ))}
+        ))} */}
     </div>
   )
 }

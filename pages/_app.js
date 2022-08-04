@@ -1,11 +1,12 @@
 import Head from 'next/head'
 import Navbar from '../components/Navbar'
 import '../styles/globals.css'
-import "../components/Button.css"
-import "../components/Navbar.css"
 import { SessionProvider } from 'next-auth/react'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { config } from '@fortawesome/fontawesome-svg-core'
+import '@fortawesome/fontawesome-svg-core/styles.css'
+config.autoAddCss = false
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   return (
@@ -57,9 +58,9 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
         <link rel='apple-touch-startup-image' href='/images/apple_splash_640.png' sizes='640x1136' /> */}
       </Head>
       <SessionProvider session={session}>
-        <Navbar />
         <Component {...pageProps} />
         <ToastContainer />
+        <Navbar />
       </SessionProvider>
     </>
   )
