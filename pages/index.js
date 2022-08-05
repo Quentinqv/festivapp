@@ -10,47 +10,13 @@ export default function Home() {
   const [posts, setPosts] = useState([])
 
   const fetchPosts = async () => {
-    const res = await fetch('')
+    const res = await fetch(`/api/posts`)
     const data = await res.json()
     setPosts(data)
-    console.log(data);
   }
   useEffect(() => {
     fetchPosts()
   } , [])
-
-  const postsTemp = [
-    {
-      post: {
-        like: true,
-        nblike: 1521,
-        description: "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-        timestamp: 1659725905,
-        images: [
-          'https://cdn.pixabay.com/photo/2018/09/14/23/28/avatar-3678347_960_720.png',
-        ]
-      },
-      user: {
-        avatar: 'https://e7.pngegg.com/pngimages/84/165/png-clipart-united-states-avatar-organization-information-user-avatar-service-computer-wallpaper-thumbnail.png',
-        username: 'John Doe',
-      },
-    },
-    {
-      post: {
-        like: true,
-        nblike: 1521,
-        description: "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-        timestamp: 1659725905,
-        images: [
-          'https://cdn.pixabay.com/photo/2018/09/14/23/28/avatar-3678347_960_720.png',
-        ]
-      },
-      user: {
-        avatar: 'https://e7.pngegg.com/pngimages/84/165/png-clipart-united-states-avatar-organization-information-user-avatar-service-computer-wallpaper-thumbnail.png',
-        username: 'John Doe',
-      },
-    }
-  ]
 
   return (
     <div className={styles.container}>
@@ -64,7 +30,7 @@ export default function Home() {
         {posts.length == 0 && // if posts is empty, we display the loading animation
           <Loader />
         }
-        {posts.map((post, index) => <Post key={index} user={post.user} post={post.post}/>)}
+        {posts.map((post, index) => <Post key={index} post={post}/>)}
       </main>
     </div>
   )

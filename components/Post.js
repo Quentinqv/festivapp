@@ -97,24 +97,24 @@ export default function Post(props) {
   return (
     <PostStyled>
       <Header>
-        <img src={props.user.avatar} alt="avatar" />
-        <span className="username">{props.user.username}</span>
+        <img src={props.post.users.avatar} alt="avatar" />
+        <span className="username">{props.post.users.username}</span>
       </Header>
       <Image>
-        {props.post.images.map((image, index) => {
+        {props.post.content.url.map((image, index) => {
           return <img key={index} src={image} alt="post" />
         })}
       </Image>
       <Actions like={props.post.like}>
         <FontAwesomeIcon icon={faHeart} size="2x" className="like" />
-        <p className="nblike">{props.post.nblike.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} likes</p>
+        <p className="nblike">{props.post.nblike.nb.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} likes</p>
       </Actions>
       <Description>
         <p className="description">
-          <span className="username">{props.user.username}</span>
+          <span className="username">{props.post.users.username}</span>
           <ReadMore text={props.post.description} />
         </p>
-        <p className="date">{moment.unix(props.post.timestamp).fromNow()}</p>
+        <p className="date">{moment(props.post.createdAt).fromNow()}</p>
       </Description>
     </PostStyled>
   )

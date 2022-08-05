@@ -17,6 +17,26 @@ model users {
   createdAt  DateTime   @default(now()) @db.DateTime(0)
   updatedAt  DateTime   @default(now()) @db.DateTime(0)
   enabled    Boolean    @default(true)
+  posts      posts[]
+}
+
+model posts {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  content     Json
+  description String   @db.VarChar(255)
+  createdAt   DateTime @default(now()) @db.DateTime(0)
+  updatedAt   DateTime @default(now()) @db.DateTime(0)
+  users       users    @relation(fields: [userId], references: [id], onUpdate: Restrict, map: "posts_ibfk_1")
+  nblike      nblike?
+
+  @@index([userId], map: "userId")
+}
+
+model nblike {
+  nb     Int
+  postId Int   @id
+  posts  posts @relation(fields: [postId], references: [id], onUpdate: Restrict, map: "nblike_ibfk_1")
 }
 
 enum users_role {
