@@ -6,8 +6,7 @@
 
 @font-face {
   font-family: "Gilroy";
-  src: url("../fonts/Gilroy/Gilroy-Black.ttf") format("truetype"),
-    url("../fonts/Gilroy/Gilroy-BlackItalic.ttf") format("truetype"),
+  src:
     url("../fonts/Gilroy/Gilroy-Bold.ttf") format("truetype"),
     url("../fonts/Gilroy/Gilroy-BoldItalic.ttf") format("truetype"),
     url("../fonts/Gilroy/Gilroy-ExtraBold.ttf") format("truetype"),
@@ -26,6 +25,11 @@
     url("../fonts/Gilroy/Gilroy-ThinItalic.ttf") format("truetype");
 }
 
+@font-face {
+  font-family: "Gilroy Black";
+  src: url("../fonts/Gilroy/Gilroy-Black.ttf") format("truetype"),
+    url("../fonts/Gilroy/Gilroy-BlackItalic.ttf") format("truetype"),
+}
 
 :root {
   /* Variables */
@@ -45,7 +49,7 @@ body {
   background-color: var(--color-primary);
   color: var(--color-font-primary);
   font-family: "Montserrat", sans-serif;
-  font-family: 16px;
+  font-size: 16px;
 }
 
 body {

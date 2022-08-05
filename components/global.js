@@ -1,4 +1,7 @@
+import { useState } from "react";
 import styled from "styled-components"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 // Button
 const ButtonStyled = styled.button.attrs((props) => {
@@ -20,5 +23,38 @@ export function Button(props) {
     <ButtonStyled {...props}>
       {props.text}
     </ButtonStyled>
+  )
+}
+
+// ReadMore
+const More = styled.span`
+  font-family: "Gilroy", sans-serif;
+  font-size: initial;
+  margin-left: 10px;
+`
+
+export function ReadMore(props) {
+  const [text, setText] = useState(props.text.slice(0, props.maxLength || 100) + "...");
+
+  return (
+    <span>
+      {text}
+      {(props.text.length > 100 && text.length <= 103) &&
+        <More onClick={() => setText(props.text)}>Plus</More>
+      }
+    </span>
+  )
+}
+
+// Loader
+const LoaderStyled = styled.div`
+
+`
+
+export function Loader(props) {
+  return (
+    <LoaderStyled {...props}>
+      <FontAwesomeIcon icon={faSpinner} size="xl" spin />
+    </LoaderStyled>
   )
 }
