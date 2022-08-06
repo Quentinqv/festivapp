@@ -8,6 +8,19 @@ export default NextAuth({
   pages: {
     signIn: "/signin",
   },
+  callbacks: {
+    async session({ session, token }) {
+      session.user = token.user;
+      return session;
+    },
+    async jwt({ token, user }) {
+      if (user) {
+        delete user.password;
+        token.user = user;
+      }
+      return token;
+    },
+  },
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -16,6 +29,7 @@ export default NextAuth({
         password: {  label: "Password", type: "password", placeholder: "********" },
       },
       async authorize(credentials, req) {
+        // console.log(req.body);
         const user = await prisma.users.findUnique({
           where: {
             email: req.body.username,

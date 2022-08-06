@@ -12,11 +12,13 @@ model users {
   username   String     @unique(map: "username") @db.VarChar(50)
   email      String     @unique(map: "email") @db.VarChar(80)
   password   String     @db.VarChar(60)
+  avatar     String     @db.Text
   role       users_role
   categories Json?
   createdAt  DateTime   @default(now()) @db.DateTime(0)
   updatedAt  DateTime   @default(now()) @db.DateTime(0)
   enabled    Boolean    @default(true)
+  likes      likes[]
   posts      posts[]
 }
 
@@ -28,6 +30,7 @@ model posts {
   createdAt   DateTime @default(now()) @db.DateTime(0)
   updatedAt   DateTime @default(now()) @db.DateTime(0)
   users       users    @relation(fields: [userId], references: [id], onUpdate: Restrict, map: "posts_ibfk_1")
+  likes       likes[]
   nblike      nblike?
 
   @@index([userId], map: "userId")
@@ -37,6 +40,16 @@ model nblike {
   nb     Int
   postId Int   @id
   posts  posts @relation(fields: [postId], references: [id], onUpdate: Restrict, map: "nblike_ibfk_1")
+}
+
+model likes {
+  userId Int
+  postId Int
+  posts  posts @relation(fields: [postId], references: [id], onUpdate: Restrict, map: "likes_ibfk_1")
+  users  users @relation(fields: [userId], references: [id], onUpdate: Restrict, map: "likes_ibfk_2")
+
+  @@id([userId, postId])
+  @@index([postId], map: "postId")
 }
 
 enum users_role {

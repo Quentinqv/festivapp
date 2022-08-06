@@ -1,7 +1,16 @@
 import { PrismaClient } from "@prisma/client"
 const prisma = new PrismaClient()
+import { getSession } from "next-auth/react"
 
 export default async function handler(req, res) {
+  // const session = await getSession({ req })
+
+  const session = {
+    user: {
+      id: 19,
+    }
+  }
+
   if (req.method === "GET") {
     await prisma.posts.findMany({
       include: {
@@ -9,16 +18,18 @@ export default async function handler(req, res) {
           select: {
             id: true,
             username: true,
+            avatar: true,
           },
         },
         nblike: true,
+        likes: {
+          where: {
+            userId: session.user.id,
+            postId: prisma.posts.id,
+          }
+        },
       },
     }).then(posts => {
-      posts.forEach(post => {
-        post.users.avatar = "https://e7.pngegg.com/pngimages/84/165/png-clipart-united-states-avatar-organization-information-user-avatar-service-computer-wallpaper-thumbnail.png"
-        post.like = false
-      });
-
       res.status(200).json(posts)
     })
   } else {

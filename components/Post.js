@@ -6,6 +6,7 @@ import styled from "styled-components"
 import { ReadMore } from "./global";
 import moment from 'moment';
 import 'moment/locale/fr';
+import { useState } from "react";
 
 moment.locale('fr');
 
@@ -54,7 +55,7 @@ const Image = styled.div`
 
 const Actions = styled.div.attrs((props) => {
   return {
-    like: props.like ? "red" : "black",
+    like: props.like ? "red" : "#C4C4C4",
   }
 })`
   display: flex;
@@ -69,6 +70,22 @@ const Actions = styled.div.attrs((props) => {
 
   .nblike {
     font-family: "Gilroy", sans-serif;
+  }
+
+  .likeBeat {
+    animation: heartBeat 0.3s 1;
+  }
+
+  @keyframes heartBeat {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.4);
+    }
+    100% {
+      transform: scale(1);
+    }
   }
 `
 
@@ -94,8 +111,27 @@ const Description = styled.div`
 `
 
 export default function Post(props) {
+  const [like, setLike] = useState(props.post.likes.length > 0 ? true : false)
+  const [nblike, setNblike] = useState(props.post.nblike === null ? 0 : props.post.nblike.nb)
+
+  const handleLike = async () => {
+    const likeHeart = document.querySelector(`#post${props.post.id} .like`)
+    likeHeart.classList.add("likeBeat")
+    setTimeout(() => {
+      likeHeart.classList.remove("likeBeat")
+    }, 300);
+
+    setLike(!like)
+    const res = await fetch(`/api/posts/${props.post.id}`, {
+      method: "PATCH",
+    }).then(res => res.json())
+    .then(data => {
+      setNblike(data.nb)
+    })
+  }
+
   return (
-    <PostStyled>
+    <PostStyled id={`post${props.post.id}`}>
       <Header>
         <img src={props.post.users.avatar} alt="avatar" />
         <span className="username">{props.post.users.username}</span>
@@ -105,9 +141,9 @@ export default function Post(props) {
           return <img key={index} src={image} alt="post" />
         })}
       </Image>
-      <Actions like={props.post.like}>
-        <FontAwesomeIcon icon={faHeart} size="2x" className="like" />
-        <p className="nblike">{props.post.nblike.nb.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} likes</p>
+      <Actions like={like}>
+        <FontAwesomeIcon icon={faHeart} size="2x" className="like" onClick={handleLike}/>
+        <p className="nblike">{nblike.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} like{nblike > 1 && 's'}</p>
       </Actions>
       <Description>
         <p className="description">

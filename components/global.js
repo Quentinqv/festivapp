@@ -34,11 +34,11 @@ const More = styled.span`
 `
 
 export function ReadMore(props) {
-  const [text, setText] = useState(props.text.slice(0, props.maxLength || 100) + "...");
+  const [text, setText] = useState(props.text.slice(0, props.maxLength || 100));
 
   return (
     <span>
-      {text}
+      {text}{(props.text.length > 100 && text.length <= 103) && "..."}
       {(props.text.length > 100 && text.length <= 103) &&
         <More onClick={() => setText(props.text)}>Plus</More>
       }
@@ -47,9 +47,7 @@ export function ReadMore(props) {
 }
 
 // Loader
-const LoaderStyled = styled.div`
-
-`
+const LoaderStyled = styled.div``
 
 export function Loader(props) {
   return (
