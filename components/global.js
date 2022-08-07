@@ -47,12 +47,26 @@ export function ReadMore(props) {
 }
 
 // Loader
-const LoaderStyled = styled.div``
+const LoaderContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100vh;
+`
 
 export function Loader(props) {
   return (
-    <LoaderStyled {...props}>
+    <div {...props}>
       <FontAwesomeIcon icon={faSpinner} size="xl" spin />
-    </LoaderStyled>
+    </div>
+  )
+}
+
+export function PageLoader(props) {
+  return (
+    <LoaderContainer {...props}>
+      <FontAwesomeIcon icon={faSpinner} size="xl" spin />
+    </LoaderContainer>
   )
 }

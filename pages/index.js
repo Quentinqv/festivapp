@@ -5,8 +5,16 @@ import Post from '../components/Post'
 import styles from '../styles/Home.module.css'
 import { useState, useEffect } from 'react'
 import { Loader } from '../components/global'
+import { signIn, useSession } from 'next-auth/react' 
 
 export default function Home() {
+  const { session } = useSession({
+    required: true,
+    onUnauthenticated() {
+      signIn()
+    },
+  })
+
   const [posts, setPosts] = useState([])
 
   const fetchPosts = async () => {

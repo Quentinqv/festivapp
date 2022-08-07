@@ -41,7 +41,7 @@ export default async function handler(req, res) {
         }
       })
       
-      res.status(200).json(newNbLike)
+      res.status(200).send(newNbLike)
     } else {
       await prisma.likes.create({
         data: {
@@ -65,7 +65,7 @@ export default async function handler(req, res) {
         }
       })
 
-      res.status(200).json(newNbLike)
+      res.status(200).send(newNbLike)
     }
 
   } else {
