@@ -7,6 +7,7 @@ import logo_white from "../images/logo_white.svg"
 import deco from "../images/deco.png"
 import { toast } from 'react-toastify';
 import { useRouter } from "next/router"
+import Head from "next/head.js"
 
 const Signin = ({ csrfToken, providers }) => {
   const router = useRouter()
@@ -26,6 +27,10 @@ const Signin = ({ csrfToken, providers }) => {
   }
 
   return (
+    <>
+    <Head>
+      <title>Connexion • Festiv'app</title>
+    </Head>
     <div className={styles.container} style={{backgroundImage: `url(${deco.src})`}}>
       <div style={{textAlign: "center"}}>
         <Image src={logo_white} alt="logo" />
@@ -44,6 +49,7 @@ const Signin = ({ csrfToken, providers }) => {
         <Button type="submit" text="Connexion" style={{ fontSize: "18px", fontWeight: "700" }}/>
       </form>
     </div>
+    </>
   )
 }
 

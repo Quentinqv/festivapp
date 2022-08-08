@@ -12,6 +12,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons"
 import Link from "next/link"
 import { useRouter } from "next/router"
+import Head from "next/head"
 
 const Header = styled.div`
   display: flex;
@@ -161,6 +162,9 @@ export default function Profile() {
 
   return (
     <>
+      <Head>
+        <title>{infosUser.username} • Festiv'app</title>
+      </Head>
       <Header>
         <div className="name">
           <h1>{infosUser.username}</h1>

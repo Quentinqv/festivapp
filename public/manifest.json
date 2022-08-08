@@ -2,7 +2,7 @@
   "name": "Festiv'App",
   "short_name": "Festivapp",
   "theme_color": "#ffffff",
-  "background_color": "#004740",
+  "background_color": "#1D1443",
   "display": "fullscreen",
   "orientation": "portrait",
   "scope": "/",

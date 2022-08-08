@@ -1,8 +1,10 @@
+/* eslint-disable react/no-unescaped-entities */
 import styled from "styled-components"
 import Post from "../components/Post"
 import { signIn, useSession } from "next-auth/react"
 import { useEffect, useState } from "react"
 import { PageLoader, Button } from "../components/global"
+import Head from "next/head"
 
 const Header = styled.div`
   display: flex;
@@ -88,6 +90,9 @@ export default function AddPost() {
 
   return (
     <>
+      <Head>
+        <title>Publier • Festiv'app</title>
+      </Head>
       <Header>
         <h1>Ajouter un post</h1>
         <Button text="Publier" width="30%" onClick={handleAdd}/>

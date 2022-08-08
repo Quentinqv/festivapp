@@ -8,6 +8,7 @@ import { useSession, signOut, signIn } from "next-auth/react"
 import { useEffect, useState, useCallback } from "react"
 import Link from "next/link"
 import { toast } from "react-toastify"
+import Head from "next/head"
 
 const Header = styled.div`
   display: flex;
@@ -288,6 +289,9 @@ export default function EditProfile() {
 
   return (
     <>
+      <Head>
+        <title>Modifier le profil • Festiv'app</title>
+      </Head>
       <Header>
         <div className="left">
           <Link href={`/profile/${user !== {} && user.id}`}>

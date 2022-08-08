@@ -5,6 +5,7 @@ import { Button } from "../components/global"
 import logo_white from "../images/logo_white.svg"
 import deco from "../images/deco.png"
 import { toast } from 'react-toastify';
+import Head from "next/head"
 
 export default function Signup() {
   const validateForm = (e) => {
@@ -34,6 +35,10 @@ export default function Signup() {
   }
 
   return (
+    <>
+    <Head>
+      <title>Inscription • Festiv'app</title>
+    </Head>
     <div className={styles.container} style={{backgroundImage: `url(${deco.src})`}}>
       <div style={{ textAlign: "center" }}>
         <Image src={logo_white} alt="logo" />
@@ -92,5 +97,6 @@ export default function Signup() {
         />
       </form>
     </div>
+    </>
   )
 }
