@@ -43,13 +43,6 @@ const Signin = ({ csrfToken, providers }) => {
         </label>
         <Button type="submit" text="Connexion" style={{ fontSize: "18px", fontWeight: "700" }}/>
       </form>
-      {/* <hr />
-      {providers &&
-        Object.values(providers).map((provider) => (
-          <div key={provider.name} style={{ marginBottom: 0 }}>
-            <Button onClick={() => signIn(provider.id)} text={`Sign in with ${provider.name}`} style={{backgroundColor: "var(--color-quaternary)"}} />
-          </div>
-        ))} */}
     </div>
   )
 }

@@ -14,8 +14,12 @@ import {
 export default function Navbar() {
   const { data: session, status } = useSession()
 
-  if (status === "loading" || status === "unauthenticated") {
+  if (status === "loading") {
     return <PageLoader />
+  }
+
+  if (status === "unauthenticated") {
+    return (<></>)
   }
 
   return (
