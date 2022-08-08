@@ -30,16 +30,23 @@ export default NextAuth({
       },
       async authorize(credentials, req) {
         // console.log(req.body);
-        const user = await prisma.users.findUnique({
+        const user = await prisma.users.findMany({
           where: {
-            email: req.body.username,
+            OR: [
+              { username: req.body.username },
+              { email: req.body.username },
+            ]
           },
         })
   
-        if (bcrypt.compareSync(req.body.password, user.password)) {
-          return user
-        } else {
+        if (user.length === 0) {
           return null
+        } else {
+          if (bcrypt.compareSync(req.body.password, user[0].password)) {
+            return user[0]
+          } else {
+            return null
+          }
         }
       }
     })

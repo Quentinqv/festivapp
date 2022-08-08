@@ -1,11 +1,15 @@
 /* eslint-disable react/no-unescaped-entities */
 import styled from "styled-components"
 import Post from "../../components/Post"
-import { getSession, signIn, useSession } from "next-auth/react"
+import { getSession, signIn, signOut, useSession } from "next-auth/react"
 import { useEffect, useState } from "react"
 import { PageLoader, Button } from "../../components/global"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faEdit, faSadCry } from "@fortawesome/free-solid-svg-icons"
+import {
+  faEdit,
+  faRightFromBracket,
+  faSadCry,
+} from "@fortawesome/free-solid-svg-icons"
 import Link from "next/link"
 import { useRouter } from "next/router"
 
@@ -16,6 +20,24 @@ const Header = styled.div`
   gap: 10px;
   padding: 10px 20px;
   border-bottom: 1px solid #e6e6e6;
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  .icons {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .name {
+    flex-direction: column;
+
+    span {
+      text-transform: capitalize;
+    }
+  }
 `
 
 const Infos = styled.div`
@@ -92,12 +114,28 @@ export default function Profile(props) {
   const [idUser, setIdUser] = useState(id)
 
   useEffect(() => {
+    async function init(id) {
+      await fetch(`/api/users/${id}`)
+        .then((res) => res.json())
+        .then((res) => {
+          setInfosUser(res)
+        })
+
+      await fetch(`/api/posts/user/${id}`)
+        .then((res) => res.json())
+        .then((res) => {
+          setPosts(res)
+        })
+    }
+
     if (session) {
       if (id === undefined || session.user.id === parseInt(id)) {
         setMyProfile(true)
         setIdUser(session.user.id)
       }
     }
+
+    init(id)
   }, [id, session])
 
   if (status === "loading") {
@@ -112,8 +150,20 @@ export default function Profile(props) {
   return (
     <>
       <Header>
-        <h1>{infosUser.username}</h1>
-        {myProfile && <FontAwesomeIcon icon={faEdit} size="xl" />}
+        <div className="name">
+          <h1>{infosUser.username}</h1>
+          <span className={infosUser.role}>{infosUser.role}</span>
+        </div>
+        {myProfile && (
+          <div className="icons">
+            <Link href="/profile/edit">
+              <FontAwesomeIcon icon={faEdit} size="xl" />
+            </Link>
+            <span onClick={() => signOut()}>
+              <FontAwesomeIcon icon={faRightFromBracket} size="xl" />
+            </span>
+          </div>
+        )}
         {!myProfile && <Button text="Suivre" width="40%"></Button>}
       </Header>
       <Infos>

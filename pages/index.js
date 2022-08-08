@@ -4,16 +4,11 @@ import Image from 'next/image'
 import Post from '../components/Post'
 import styles from '../styles/Home.module.css'
 import { useState, useEffect } from 'react'
-import { Loader } from '../components/global'
+import { Loader, PageLoader } from '../components/global'
 import { signIn, useSession } from 'next-auth/react' 
 
 export default function Home() {
-  const { session } = useSession({
-    required: true,
-    onUnauthenticated() {
-      signIn()
-    },
-  })
+  const { data: session, status } = useSession()
 
   const [posts, setPosts] = useState([])
 
@@ -25,6 +20,15 @@ export default function Home() {
   useEffect(() => {
     fetchPosts()
   } , [])
+
+  if (status === "loading") {
+    return <PageLoader />
+  }
+
+  if (status === "unauthenticated") {
+    signIn()
+    return <PageLoader />
+  }
 
   return (
     <div className={styles.container}>

@@ -91,3 +91,20 @@ input:focus, textarea:focus, select:focus {
 input, textarea, select {
   color: var(--color-font-primary);
 }
+
+.admin, .personnal, .professional {
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.admin {
+  background-color: red;
+}
+
+.personnal {
+  background-color: var(--color-tertiary);
+}
+
+.professional {
+  background-color: var(--color-quaternary);
+}

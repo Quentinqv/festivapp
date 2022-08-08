@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { signIn, signOut, useSession } from "next-auth/react"
 import styles from "./Navbar.module.css"
+import { PageLoader } from "./global"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
   faHouse,
@@ -12,6 +13,10 @@ import {
 
 export default function Navbar() {
   const { data: session, status } = useSession()
+
+  if (status === "loading" || status === "unauthenticated") {
+    return <PageLoader />
+  }
 
   return (
     <nav className={styles.nav}>

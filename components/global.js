@@ -9,7 +9,7 @@ const ButtonStyled = styled.button.attrs((props) => {
     width: props.width ? props.width : "100%",
   }
 })`
-  background-color: var(--color-secondary);
+  background-color: ${(props) => props.error ? "red" : "var(--color-secondary)"};
   border-radius: 5px;
   padding: 18px;
   color: var(--color-font-primary);
