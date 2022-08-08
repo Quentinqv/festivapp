@@ -104,20 +104,31 @@ const NoPosts = styled.div`
   text-align: center;
 `
 
-export default function Profile(props) {
+export default function Profile() {
   const { data: session, status } = useSession()
   const router = useRouter()
   const { id } = router.query
+  const defaultInfosUser = {
+    username: "",
+    email: "",
+    avatar: "",
+    _count: {
+      posts: 0,
+    }
+  }
   const [myProfile, setMyProfile] = useState(false)
-  const [posts, setPosts] = useState(props.posts)
-  const [infosUser, setInfosUser] = useState(props.user)
+  const [posts, setPosts] = useState([])
+  const [infosUser, setInfosUser] = useState(defaultInfosUser)
   const [idUser, setIdUser] = useState(id)
 
   useEffect(() => {
     async function init(id) {
+      console.log("id", id);
+
       await fetch(`/api/users/${id}`)
         .then((res) => res.json())
         .then((res) => {
+          console.log("res", res);
           setInfosUser(res)
         })
 
@@ -131,11 +142,12 @@ export default function Profile(props) {
     if (session) {
       if (id === undefined || session.user.id === parseInt(id)) {
         setMyProfile(true)
-        setIdUser(session.user.id)
       }
     }
 
-    init(id)
+    if (id) {
+      init(id)
+    }
   }, [id, session])
 
   if (status === "loading") {
@@ -209,29 +221,29 @@ export default function Profile(props) {
   )
 }
 
-export async function getStaticPaths() {
-  const res = await fetch(`${process.env.API_URL}users`)
-  const users = await res.json()
-  const paths = users.map((user) => ({ params: { id: `${user.id}` } }))
-  return { paths, fallback: false }
-}
+// export async function getStaticPaths() {
+//   const res = await fetch(`${process.env.API_URL}users`)
+//   const users = await res.json()
+//   const paths = users.map((user) => ({ params: { id: `${user.id}` } }))
+//   return { paths, fallback: false }
+// }
 
-export async function getStaticProps({ params }) {
-  const props = {}
+// export async function getStaticProps({ params }) {
+//   const props = {}
 
-  await fetch(`${process.env.API_URL}users/${params.id}`)
-    .then((res) => res.json())
-    .then((res) => {
-      props.user = res
-    })
+//   await fetch(`${process.env.API_URL}users/${params.id}`)
+//     .then((res) => res.json())
+//     .then((res) => {
+//       props.user = res
+//     })
 
-  await fetch(`${process.env.API_URL}posts/user/${params.id}`)
-    .then((res) => res.json())
-    .then((res) => {
-      props.posts = res
-    })
+//   await fetch(`${process.env.API_URL}posts/user/${params.id}`)
+//     .then((res) => res.json())
+//     .then((res) => {
+//       props.posts = res
+//     })
 
-  return {
-    props: props,
-  }
-}
+//   return {
+//     props: props,
+//   }
+// }
