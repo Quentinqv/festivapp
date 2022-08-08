@@ -7,6 +7,7 @@ import { ReadMore } from "./global"
 import moment from "moment"
 import "moment/locale/fr"
 import { useState } from "react"
+import Link from "next/link"
 
 moment.locale("fr")
 
@@ -190,7 +191,7 @@ export default function Post(props) {
           src={`https://res.cloudinary.com/drbc8fw3u/image/upload/v1659792735/${props.post.users.avatar}`}
           alt="avatar"
         />
-        <span className="username">{props.post.users.username}</span>
+        <Link href={`/profile/${props.post.users.id}`}><span className="username">{props.post.users.username}</span></Link>
       </Header>
       <Image>
         <InputFiles onClick={handleAddImage}>
@@ -242,7 +243,7 @@ export default function Post(props) {
         {!adding && (
           <>
             <p className="description">
-              <span className="username">{props.post.users.username}</span>
+              <Link href={`/profile/${props.post.users.id}`}><span className="username">{props.post.users.username}</span></Link>
               <ReadMore text={props.post.description} />
             </p>
             <p className="date">{moment(props.post.createdAt).fromNow()}</p>
