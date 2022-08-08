@@ -43,14 +43,14 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
         <meta name='twitter:url' content='https://festivapp.quentin-vitoux.fr' />
         <meta name='twitter:title' content="Festiv'App" />
         <meta name='twitter:description' content="Festiv'App, partagez vos souvenirs." />
-        <meta name='twitter:image' content='https://festivapp.quentin-vitoux.fr/icons/android-chrome-192x192.png' />
+        <meta name='twitter:image' content='https://festivapp.quentin-vitoux.fr/icons/preview.png' />
         <meta name='twitter:creator' content='@Festivapp' />
         <meta property='og:type' content='website' />
         <meta property='og:title' content="Festiv'App" />
         <meta property='og:description' content="Festiv'App, partagez vos souvenirs." />
         <meta property='og:site_name' content="Festiv'App" />
         <meta property='og:url' content='https://festivapp.quentin-vitoux.fr' />
-        <meta property='og:image' content='https://festivapp.quentin-vitoux.fr/icons/apple-touch-icon.png' />
+        <meta property='og:image' content='https://festivapp.quentin-vitoux.fr/icons/preview.png' />
 
         <title>Festiv'app</title>
       </Head>
