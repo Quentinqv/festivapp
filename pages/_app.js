@@ -51,6 +51,9 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
         <meta property='og:site_name' content="Festiv'App" />
         <meta property='og:url' content='https://festivapp.quentin-vitoux.fr' />
         <meta property='og:image' content='https://festivapp.quentin-vitoux.fr/icons/preview.png' />
+        <meta property="og:image:type" content="image/png" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
 
         <title>Festiv'app</title>
       </Head>
