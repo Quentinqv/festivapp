@@ -8,6 +8,14 @@ import deco from "../images/deco.png"
 import { toast } from 'react-toastify';
 import { useRouter } from "next/router"
 import Head from "next/head.js"
+import Link from "next/link"
+import styled from "styled-components"
+
+const SignupButton = styled(Button)`
+  background-color: var(--color-quaternary);
+  font-weight: 700;
+  font-size: 18px;
+`
 
 const Signin = ({ csrfToken, providers }) => {
   const router = useRouter()
@@ -48,6 +56,10 @@ const Signin = ({ csrfToken, providers }) => {
         </label>
         <Button type="submit" text="Connexion" style={{ fontSize: "18px", fontWeight: "700" }}/>
       </form>
+      <hr></hr>
+      <Link href="/signup">
+        <SignupButton text="S'inscrire"></SignupButton>
+      </Link>
     </div>
     </>
   )

@@ -6,6 +6,14 @@ import logo_white from "../images/logo_white.svg"
 import deco from "../images/deco.png"
 import { toast } from 'react-toastify';
 import Head from "next/head"
+import Link from "next/link"
+import styled from "styled-components"
+
+const SigninButton = styled(Button)`
+  background-color: var(--color-quaternary);
+  font-weight: 700;
+  font-size: 18px;
+`
 
 export default function Signup() {
   const validateForm = (e) => {
@@ -96,6 +104,10 @@ export default function Signup() {
           style={{ fontSize: "18px", fontWeight: "700" }}
         />
       </form>
+      <hr></hr>
+      <Link href="/signin">
+        <SigninButton text="Se connecter"></SigninButton>
+      </Link>
     </div>
     </>
   )
