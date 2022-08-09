@@ -23,6 +23,23 @@ export default async function handler(req, res) {
               postId: prisma.posts.id,
             }
           },
+          user_has_comment: {
+            select: {
+              users: {
+                select: {
+                  id: true,
+                  username: true,
+                  avatar: true,
+                },
+              },
+              comments: {
+                select: {
+                  id: true,
+                  content: true,
+                },
+              },
+            },
+          },
         },
         orderBy: {
           createdAt: "desc",

@@ -9,20 +9,7 @@ export default function PostUnique() {
   const { data: session, status } = useSession()
   const router = useRouter()
   const { id } = router.query
-  const [post, setPost] = useState({
-    likes: [],
-    nblike: 0,
-    users: {
-      avatar: "avatars/default",
-    },
-    content: {
-      url: []
-    },
-    nblike: {
-      nb: 0,
-    },
-    description: "",
-  })
+  const [post, setPost] = useState()
 
   useEffect(() => {
     if (id !== undefined) {

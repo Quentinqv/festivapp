@@ -8,30 +8,32 @@ datasource db {
 }
 
 model users {
-  id         Int        @id @default(autoincrement())
-  username   String     @unique(map: "username") @db.VarChar(50)
-  email      String     @unique(map: "email") @db.VarChar(80)
-  password   String     @db.VarChar(60)
-  avatar     String     @db.Text
-  role       users_role
-  categories Json?
-  createdAt  DateTime   @default(now()) @db.DateTime(0)
-  updatedAt  DateTime   @default(now()) @db.DateTime(0)
-  enabled    Boolean    @default(true)
-  likes      likes[]
-  posts      posts[]
+  id               Int                @id @default(autoincrement())
+  username         String             @unique(map: "username") @db.VarChar(50)
+  email            String             @unique(map: "email") @db.VarChar(80)
+  password         String             @db.VarChar(60)
+  avatar           String             @db.Text
+  role             users_role
+  categories       Json?
+  createdAt        DateTime           @default(now()) @db.DateTime(0)
+  updatedAt        DateTime           @default(now()) @db.DateTime(0)
+  enabled          Boolean            @default(true)
+  likes            likes[]
+  posts            posts[]
+  user_has_comment user_has_comment[]
 }
 
 model posts {
-  id          Int      @id @default(autoincrement())
-  userId      Int
-  content     Json
-  description String   @db.VarChar(255)
-  createdAt   DateTime @default(now()) @db.DateTime(0)
-  updatedAt   DateTime @default(now()) @db.DateTime(0)
-  users       users    @relation(fields: [userId], references: [id], onUpdate: Restrict, map: "posts_ibfk_1")
-  likes       likes[]
-  nblike      nblike?
+  id               Int                @id @default(autoincrement())
+  userId           Int
+  content          Json
+  description      String             @db.VarChar(255)
+  createdAt        DateTime           @default(now()) @db.DateTime(0)
+  updatedAt        DateTime           @default(now()) @db.DateTime(0)
+  users            users              @relation(fields: [userId], references: [id], onUpdate: Restrict, map: "posts_ibfk_1")
+  likes            likes[]
+  nblike           nblike?
+  user_has_comment user_has_comment[]
 
   @@index([userId], map: "userId")
 }
@@ -49,6 +51,27 @@ model likes {
   users  users @relation(fields: [userId], references: [id], onUpdate: Restrict, map: "likes_ibfk_2")
 
   @@id([userId, postId])
+  @@index([postId], map: "postId")
+}
+
+model comments {
+  id               Int                @id @default(autoincrement())
+  content          String             @db.VarChar(255)
+  createdAt        DateTime           @default(now()) @db.DateTime(0)
+  updatedAt        DateTime           @default(now()) @db.DateTime(0)
+  user_has_comment user_has_comment[]
+}
+
+model user_has_comment {
+  userId    Int
+  commentId Int
+  postId    Int
+  comments  comments @relation(fields: [commentId], references: [id], onUpdate: Restrict, map: "user_has_comment_ibfk_1")
+  posts     posts    @relation(fields: [postId], references: [id], onUpdate: Restrict, map: "user_has_comment_ibfk_2")
+  users     users    @relation(fields: [userId], references: [id], onUpdate: Restrict, map: "user_has_comment_ibfk_3")
+
+  @@id([userId, commentId, postId])
+  @@index([commentId], map: "commentId")
   @@index([postId], map: "postId")
 }
 

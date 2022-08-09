@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
@@ -34,7 +34,11 @@ const More = styled.span`
 `
 
 export function ReadMore(props) {
-  const [text, setText] = useState(props.text.slice(0, props.maxLength || 100));
+  const [text, setText] = useState("");
+
+  useEffect(() => {
+    setText(props.text.slice(0, props.maxLength || 100))
+  }, [props])
 
   return (
     <span>

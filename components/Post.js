@@ -1,13 +1,15 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
-import { faHeart, faPlusCircle } from "@fortawesome/free-solid-svg-icons"
+import { faHeart, faPlusCircle, faPaperPlane } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import styled from "styled-components"
-import { ReadMore } from "./global"
+import { ReadMore, PageLoader } from "./global"
 import moment from "moment"
 import "moment/locale/fr"
 import { useEffect, useState } from "react"
 import Link from "next/link"
+import {useSession} from "next-auth/react"
 
 moment.locale("fr")
 
@@ -19,6 +21,18 @@ const PostStyled = styled.div`
   border-radius: 5px;
   // background-color: #2C1F61;
   margin: 10px 0;
+
+  .customDescription {
+    outline: none;
+    border-bottom: solid 1px #c4c4c4;
+    padding: 0 0 10px 0;
+
+    &[contenteditable="true"]:empty:not(:focus):before {
+      content: attr(data-ph);
+      color: grey;
+      font-style: italic;
+    }
+  }
 `
 
 const Header = styled.div`
@@ -110,18 +124,6 @@ const Description = styled.div`
     font-size: 12px;
     // text-align: right;
   }
-
-  .customDescription {
-    outline: none;
-    border-bottom: solid 1px #c4c4c4;
-    padding: 0 0 10px 0;
-
-    &[contenteditable="true"]:empty:not(:focus):before {
-      content: attr(data-ph);
-      color: grey;
-      font-style: italic;
-    }
-  }
 `
 
 const InputFiles = styled.div`
@@ -145,25 +147,106 @@ const InputFiles = styled.div`
   }
 `
 
+const Comments = styled.div`
+  .noComments {
+    padding: 0px 20px;
+  }
+`
+
+const CommentsList = styled.div``
+
+const CommentsForm = styled.form`
+  padding: 0px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+
+  textarea {
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    border-bottom: solid 1px #c4c4c4;
+    padding: 5px;
+    font-size: 14px;
+    outline: none;
+    box-sizing: border-box;
+    resize: none;
+
+    &:focus {
+      transition: border-bottom 0.3s ease-in-out;
+      outline: none;
+      border-bottom: 1px solid var(--color-tertiary);
+    }
+  }
+
+  button {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    color: var(--color-font-primary);
+  }
+`
+
+const Comment = styled.div`
+  padding: 0px 20px;
+  display: flex;
+
+  img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+
+  span {
+    font-size: initial;
+    font-family: "Gilroy", sans-serif;
+    padding-right: 5px;
+  }
+
+  & > div > p:first-child {
+    margin: 0px;
+  }
+
+  & > div > p:last-child {
+    margin-top: 0px;
+  }
+`
+
 export default function Post(props) {
-  const [like, setLike] = useState(props.post.likes.length > 0 ? true : false)
-  const [nblike, setNblike] = useState(
-    props.post.nblike === null ? 0 : props.post.nblike.nb
-  )
-  const [adding, setAdding] = useState(
-    props.adding === undefined ? false : props.adding
-  )
+  const { data: session, status } = useSession()
+  const [post, setPost] = useState({
+    id: 0,
+    likes: [],
+    nblike: 0,
+    users: {
+      avatar: "avatars/default",
+    },
+    content: {
+      url: []
+    },
+    nblike: {
+      nb: 0,
+    },
+    description: "",
+    user_has_comment: [],
+  })
+  const [like, setLike] = useState()
+  const [nblike, setNblike] = useState(false)
+  const [adding, setAdding] = useState(false)
   const [srcPreview, setSrcPreview] = useState("")
 
   const handleLike = async () => {
-    const likeHeart = document.querySelector(`#post${props.post.id} .like`)
+    const likeHeart = document.querySelector(`#post${post.id} .like`)
     likeHeart.classList.add("likeBeat")
     setTimeout(() => {
       likeHeart.classList.remove("likeBeat")
     }, 300)
 
     setLike(!like)
-    const res = await fetch(`/api/posts/${props.post.id}`, {
+    const res = await fetch(`/api/posts/${post.id}`, {
       method: "PATCH",
     })
       .then((res) => res.json())
@@ -173,7 +256,7 @@ export default function Post(props) {
   }
 
   const handleAddImage = async (e) => {
-    const input = document.querySelector(`#post${props.post.id} .inputFiles`)
+    const input = document.querySelector(`#post${post.id} .inputFiles`)
     input.click()
   }
 
@@ -184,21 +267,78 @@ export default function Post(props) {
     }
   }
 
+  const handleComment = (e) => {
+    let scroll_height = e.target.scrollHeight;
+    e.target.style.height = `${scroll_height}px`;
+
+
+    if (e.target.value === "") {
+      e.target.style.height = "initial";
+    }
+  }
+
+  const handleSubmitComment = async (e) => {
+    e.preventDefault()
+
+    const comment = e.target.comment.value
+
+    const res = await fetch(`/api/posts/comments/${post.id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ comment }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setPost({
+          ...post,
+          user_has_comment: [
+            ...post.user_has_comment,
+            {
+              users: {
+                id: session.user.id,
+                avatar: session.user.avatar,
+                username: session.user.username,
+              },
+              comments: data,
+            }
+          ]
+        })
+        e.target.comment.value = ""
+      })
+  }
+
   useEffect(() => {
-    setLike(props.post.likes.length > 0 ? true : false)
-    setNblike(
-      props.post.nblike === null ? 0 : props.post.nblike.nb
-    )
-  }, [props])
+    if (session) {
+      if (props.post) {
+        setPost(props.post)
+        setAdding(props.adding === undefined ? false : props.adding)
+        setLike(post.likes.length > 0 ? true : false)
+        setNblike(
+          post.nblike === null ? 0 : post.nblike.nb
+        )
+      }
+    }
+  }, [session, props])
+
+  if (status === "loading") {
+    return <PageLoader />
+  }
+
+  if (status === "unauthenticated") {
+    signIn()
+    return <PageLoader />
+  }
 
   return (
-    <PostStyled id={`post${props.post.id}`}>
+    <PostStyled id={`post${post.id}`}>
       <Header>
         <img
-          src={`https://res.cloudinary.com/drbc8fw3u/image/upload/v1659792735/${props.post.users.avatar}`}
+          src={`https://res.cloudinary.com/drbc8fw3u/image/upload/v1659792735/${post.users.avatar}`}
           alt="avatar"
         />
-        <Link href={`/profile/${props.post.users.id}`}><span className="username">{props.post.users.username}</span></Link>
+        <Link href={`/profile/${post.users.id}`}><span className="username">{post.users.username}</span></Link>
       </Header>
       <Image>
         <InputFiles onClick={handleAddImage}>
@@ -222,7 +362,7 @@ export default function Post(props) {
           )}
         </InputFiles>
         {!adding &&
-          props.post.content.url.map((image, index) => {
+          post.content.url.map((image, index) => {
             return (
               <img
                 key={index}
@@ -250,10 +390,10 @@ export default function Post(props) {
         {!adding && (
           <>
             <p className="description">
-              <Link href={`/profile/${props.post.users.id}`}><span className="username">{props.post.users.username}</span></Link>
-              <ReadMore text={props.post.description} />
+              <Link href={`/profile/${post.users.id}`}><span className="username">{post.users.username}</span></Link>
+              <ReadMore text={post.description} />
             </p>
-            <p className="date">{moment(props.post.createdAt).fromNow()}</p>
+            <p className="date">{moment(post.createdAt).fromNow()}</p>
           </>
         )}
         {adding && (
@@ -264,6 +404,35 @@ export default function Post(props) {
           ></p>
         )}
       </Description>
+      <Comments>
+        {post.user_has_comment.length > 0 &&
+        <CommentsList>
+          {post.user_has_comment.map((comment, index) => {
+            return (
+              <Comment key={index}>
+                <img src={`https://res.cloudinary.com/drbc8fw3u/image/upload/v1659792735/${comment.users.avatar}`}></img>
+                <div>
+                  <p>
+                    <span>
+                      <Link href={`/profile/${comment.users.id}`}>{comment.users.username}</Link>
+                    </span>
+                  </p>
+                  <p>{comment.comments.content}</p>
+                </div>
+              </Comment>
+            )
+          })}
+        </CommentsList>}
+        {post.user_has_comment.length === 0 &&
+          <p className="noComments">Aucun commentaire</p>
+        }
+        <CommentsForm onSubmit={handleSubmitComment}>
+          <textarea type="text" placeholder="Ajouter un commentaire..." name="comment" onChange={handleComment} rows="1"></textarea>
+          <button type="submit">
+            <FontAwesomeIcon icon={faPaperPlane} size="xl" />
+          </button>
+        </CommentsForm>
+      </Comments>
     </PostStyled>
   )
 }
