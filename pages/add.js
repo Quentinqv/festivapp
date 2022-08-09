@@ -5,8 +5,9 @@ import { signIn, useSession } from "next-auth/react"
 import { useEffect, useState } from "react"
 import { PageLoader, Button } from "../components/global"
 import Head from "next/head"
+import Header from "../components/Header"
 
-const Header = styled.div`
+const HeaderStyled = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -93,10 +94,11 @@ export default function AddPost() {
       <Head>
         <title>Publier • Festiv'app</title>
       </Head>
-      <Header>
+      <Header />
+      <HeaderStyled>
         <h1>Ajouter un post</h1>
         <Button text="Publier" width="30%" onClick={handleAdd}/>
-      </Header>
+      </HeaderStyled>
       <Post post={post} adding={true} />
     </>
   )

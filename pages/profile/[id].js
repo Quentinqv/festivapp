@@ -13,8 +13,9 @@ import {
 import Link from "next/link"
 import { useRouter } from "next/router"
 import Head from "next/head"
+import Header from "../../components/Header"
 
-const Header = styled.div`
+const HeaderStyled = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -165,10 +166,11 @@ export default function Profile() {
       <Head>
         <title>{infosUser.username} • Festiv'app</title>
       </Head>
-      <Header>
+      <Header />
+      <HeaderStyled>
         <div className="name">
           <h1>{infosUser.username}</h1>
-          <span className={infosUser.role}>{infosUser.role}</span>
+          <span className={infosUser.role}>{infosUser.role === "professional" ? "Festival" : "Festivalier"}</span>
         </div>
         {myProfile && (
           <div className="icons">
@@ -181,7 +183,7 @@ export default function Profile() {
           </div>
         )}
         {!myProfile && <Button text="Suivre" width="40%"></Button>}
-      </Header>
+      </HeaderStyled>
       <Infos>
         <Avatar
           src={`https://res.cloudinary.com/drbc8fw3u/image/upload/v1659792735/${infosUser.avatar}`}
@@ -224,30 +226,3 @@ export default function Profile() {
     </>
   )
 }
-
-// export async function getStaticPaths() {
-//   const res = await fetch(`${process.env.API_URL}users`)
-//   const users = await res.json()
-//   const paths = users.map((user) => ({ params: { id: `${user.id}` } }))
-//   return { paths, fallback: false }
-// }
-
-// export async function getStaticProps({ params }) {
-//   const props = {}
-
-//   await fetch(`${process.env.API_URL}users/${params.id}`)
-//     .then((res) => res.json())
-//     .then((res) => {
-//       props.user = res
-//     })
-
-//   await fetch(`${process.env.API_URL}posts/user/${params.id}`)
-//     .then((res) => res.json())
-//     .then((res) => {
-//       props.posts = res
-//     })
-
-//   return {
-//     props: props,
-//   }
-// }

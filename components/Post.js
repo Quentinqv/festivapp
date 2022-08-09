@@ -6,7 +6,7 @@ import styled from "styled-components"
 import { ReadMore } from "./global"
 import moment from "moment"
 import "moment/locale/fr"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 
 moment.locale("fr")
@@ -183,6 +183,13 @@ export default function Post(props) {
       setSrcPreview(src)
     }
   }
+
+  useEffect(() => {
+    setLike(props.post.likes.length > 0 ? true : false)
+    setNblike(
+      props.post.nblike === null ? 0 : props.post.nblike.nb
+    )
+  }, [props])
 
   return (
     <PostStyled id={`post${props.post.id}`}>

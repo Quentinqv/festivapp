@@ -9,8 +9,9 @@ import { useEffect, useState, useCallback } from "react"
 import Link from "next/link"
 import { toast } from "react-toastify"
 import Head from "next/head"
+import Header from "../../components/Header"
 
-const Header = styled.div`
+const HeaderStyled = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -292,7 +293,7 @@ export default function EditProfile() {
       <Head>
         <title>Modifier le profil • Festiv'app</title>
       </Head>
-      <Header>
+      <HeaderStyled>
         <div className="left">
           <Link href={`/profile/${user !== {} && user.id}`}>
             <FontAwesomeIcon icon={faTimes} size="2x" />
@@ -300,7 +301,7 @@ export default function EditProfile() {
           <h2>Modifer le profil</h2>
         </div>
         <FontAwesomeIcon icon={faCheck} size="2x" onClick={handleSave} />
-      </Header>
+      </HeaderStyled>
       <Infos>
         <Avatar
           src={ srcPreview !== "" ? srcPreview : (`https://res.cloudinary.com/drbc8fw3u/image/upload/v1659792735/${
