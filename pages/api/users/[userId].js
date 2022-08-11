@@ -23,9 +23,13 @@ export default function handler(req, res) {
           },
         },
       }).then((user) => {
-        user._count.followers = 0
-        user._count.following = 0
-        res.status(200).send(user)
+        if (user === null) {
+          res.status(404).json(null)
+        } else {
+          user._count.followers = 0
+          user._count.following = 0
+          res.status(200).send(user)
+        }
       }
       ).catch((err) => {
         res.status(500).send(err)

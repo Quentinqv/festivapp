@@ -125,13 +125,14 @@ export default function Profile() {
 
   useEffect(() => {
     async function init(id) {
-      console.log("id", id);
-
       await fetch(`/api/users/${id}`)
         .then((res) => res.json())
         .then((res) => {
-          console.log("res", res);
-          setInfosUser(res)
+          if (res === null) {
+            router.push({pathname: "/error", query: {message: "Aucun profil n'a été trouvé."}}, "/error")
+          } else {
+            setInfosUser(res)
+          }
         })
 
       await fetch(`/api/posts/user/${id}`)

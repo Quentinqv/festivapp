@@ -29,7 +29,6 @@ export default NextAuth({
         password: {  label: "Password", type: "password", placeholder: "********" },
       },
       async authorize(credentials, req) {
-        // console.log(req.body);
         const user = await prisma.users.findMany({
           where: {
             OR: [

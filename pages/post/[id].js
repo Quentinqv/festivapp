@@ -16,7 +16,11 @@ export default function PostUnique() {
       fetch(`/api/posts/${id}`)
         .then((res) => res.json())
         .then((res) => {
-          setPost(res)
+          if (res === null) {
+            router.push({pathname: "/error", query: {message: "Aucune publication n'a été trouvée."}}, "/error")
+          } else {
+            setPost(res)
+          }
         })
     }
   }, [id])
