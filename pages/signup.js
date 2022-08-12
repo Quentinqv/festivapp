@@ -22,9 +22,24 @@ export default function Signup() {
 
   const validateForm = (e) => {
     e.preventDefault()
+    const form = e.target
+
+    if (
+      !form.querySelector("input[name=password]").value.match(
+        /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[a-zA-Z!#$%&? "])[a-zA-Z0-9!#$%&?]{8,20}$/
+      )
+    ) {
+      toast.dismiss()
+      toast.error(
+        "Le mot de passe doit contenir au moins 8 caractères, 1 majuscule, 1 minuscule, 1 chiffre et 1 caractère spécial",
+        {
+          theme: "colored",
+        }
+      )
+      return false
+    }
 
     if (isUsername && isEmail) {
-      const form = e.target
   
       fetch("/api/auth/signup", {
         method: "POST",
