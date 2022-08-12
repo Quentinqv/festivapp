@@ -18,6 +18,7 @@ export default async function Signup(req, res) {
               password: hash,
               role: req.body.role,
               categories: req.body.categories ? [...req.body.categories] : [],
+              avatar: "avatars/default"
             },
           })
 
@@ -29,6 +30,7 @@ export default async function Signup(req, res) {
               res.status(500).send({ error: `${e.meta.target} is already in use.` })
             }
           } else {
+            console.log(e);
             res.status(500).send({ error: e })
           }
         }
