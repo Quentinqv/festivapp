@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 import Head from "next/head"
 import Link from "next/link"
 import styled from "styled-components"
+import { useState } from "react"
 
 const SigninButton = styled(Button)`
   background-color: var(--color-quaternary);
@@ -16,28 +17,78 @@ const SigninButton = styled(Button)`
 `
 
 export default function Signup() {
+  const [isUsername, setIsUsername] = useState(false)
+  const [isEmail, setIsEmail] = useState(false)
+
   const validateForm = (e) => {
     e.preventDefault()
 
-    const form = e.target
+    if (isUsername && isEmail) {
+      const form = e.target
+  
+      fetch("/api/auth/signup", {
+        method: "POST",
+        body: JSON.stringify({
+          username: form.username.value,
+          email: form.email.value,
+          password: form.password.value,
+          role: form.role.value,
+        }),
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          if (res.error) {
+            toast.error(res.error, {
+              theme: "colored",
+            })
+          } else {
+            window.location.href = "/signin?userCreated=true"
+          }
+        })
+    } else {
+      toast.error("Tous les champs ne sont pas remplis correctement", {
+        theme: "colored",
+      })
+    }
 
-    fetch("/api/auth/signup", {
+  }
+
+  const searchInfo = async (e) => {
+    const column = e.target.name
+    const value = e.target.value
+
+    await fetch("/api/users/search", {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({
-        username: form.username.value,
-        email: form.email.value,
-        password: form.password.value,
-        role: form.role.value,
+        column: column,
+        value: value,
       }),
     })
       .then((res) => res.json())
       .then((res) => {
-        if (res.error) {
-          toast.error(res.error, {
+        if (res.length === 0) {
+          if (column === "username") {
+            setIsUsername(true)
+          }
+          if (column === "email") {
+            setIsEmail(true)
+          }
+          return true
+        } else {
+          toast.dismiss()
+          toast.error(`${column.charAt(0).toUpperCase() + column.slice(1)} already taken`, {
             theme: "colored",
           })
-        } else {
-          window.location.href = "/signin?userCreated=true"
+          if (column === "username") {
+            setIsUsername(false)
+          }
+          if (column === "email") {
+            setIsEmail(false)
+          }
+          return false
         }
       })
   }
@@ -63,6 +114,7 @@ export default function Signup() {
             autoComplete="username"
             name="username"
             required
+            onChange={searchInfo}
           />
         </label>
         <label>
@@ -75,6 +127,7 @@ export default function Signup() {
             autoComplete="email"
             name="email"
             required
+            onChange={searchInfo}
           />
         </label>
         <label>

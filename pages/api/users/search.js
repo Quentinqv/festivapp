@@ -8,13 +8,12 @@ export default async function handler(req, res) {
 
   if (req.method === "POST") {
     const { column, value } = req.body
+    const notId = session ? {NOT: {id: session.user.id}} : {}
 
     prisma.users.findMany({
       where: {
         [column]: value,
-        NOT: {
-          id: session.user.id,
-        }
+        ...notId,
       },
       select: {
         id: true,

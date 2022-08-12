@@ -53,10 +53,6 @@ export default function Navbar() {
               <FontAwesomeIcon
                 icon={faMapLocationDot}
                 size="xl"
-                onClick={(e) => {
-                  e.preventDefault()
-                  signOut()
-                }}
               />
             </a>
           </Link>
