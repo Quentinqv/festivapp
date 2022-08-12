@@ -1,7 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
-import { faHeart, faPlusCircle, faPaperPlane } from "@fortawesome/free-solid-svg-icons"
+import {
+  faHeart,
+  faPlusCircle,
+  faPaperPlane,
+} from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import styled from "styled-components"
 import { ReadMore, PageLoader } from "./global"
@@ -9,7 +13,7 @@ import moment from "moment"
 import "moment/locale/fr"
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import {useSession} from "next-auth/react"
+import { useSession } from "next-auth/react"
 
 moment.locale("fr")
 
@@ -24,14 +28,11 @@ const PostStyled = styled.div`
 
   .customDescription {
     outline: none;
+    border: none;
+    background-color: transparent;
+    width: 100%;
     border-bottom: solid 1px #c4c4c4;
-    padding: 0 0 10px 0;
-
-    &[contenteditable="true"]:empty:not(:focus):before {
-      content: attr(data-ph);
-      color: grey;
-      font-style: italic;
-    }
+    padding: 10px;
   }
 `
 
@@ -225,7 +226,7 @@ export default function Post(props) {
       avatar: "avatars/default",
     },
     content: {
-      url: []
+      url: [],
     },
     nblike: {
       nb: 0,
@@ -268,12 +269,11 @@ export default function Post(props) {
   }
 
   const handleComment = (e) => {
-    let scroll_height = e.target.scrollHeight;
-    e.target.style.height = `${scroll_height}px`;
-
+    let scroll_height = e.target.scrollHeight
+    e.target.style.height = `${scroll_height}px`
 
     if (e.target.value === "") {
-      e.target.style.height = "initial";
+      e.target.style.height = "initial"
     }
   }
 
@@ -302,8 +302,8 @@ export default function Post(props) {
                 username: session.user.username,
               },
               comments: data,
-            }
-          ]
+            },
+          ],
         })
         e.target.comment.value = ""
       })
@@ -315,9 +315,7 @@ export default function Post(props) {
         setPost(props.post)
         setAdding(props.adding === undefined ? false : props.adding)
         setLike(post.likes.length > 0 ? true : false)
-        setNblike(
-          post.nblike === null ? 0 : post.nblike.nb
-        )
+        setNblike(post.nblike === null ? 0 : post.nblike.nb)
       }
     }
   }, [session, props])
@@ -338,7 +336,9 @@ export default function Post(props) {
           src={`https://res.cloudinary.com/drbc8fw3u/image/upload/v1659792735/${post.users.avatar}`}
           alt="avatar"
         />
-        <Link href={`/profile/${post.users.id}`}><span className="username">{post.users.username}</span></Link>
+        <Link href={`/profile/${post.users.id}`}>
+          <span className="username">{post.users.username}</span>
+        </Link>
       </Header>
       <Image>
         <InputFiles onClick={handleAddImage}>
@@ -390,49 +390,66 @@ export default function Post(props) {
         {!adding && (
           <>
             <p className="description">
-              <Link href={`/profile/${post.users.id}`}><span className="username">{post.users.username}</span></Link>
+              <Link href={`/profile/${post.users.id}`}>
+                <span className="username">{post.users.username}</span>
+              </Link>
               <ReadMore text={post.description} />
             </p>
             <p className="date">{moment(post.createdAt).fromNow()}</p>
           </>
         )}
         {adding && (
-          <p
+          <textarea
             className="customDescription"
-            contentEditable
-            data-ph="Ajouter une description..."
-          ></p>
+            placeholder="Ajouter une description..."
+            onChange={(element) => {
+              element.target.style.height = "5px";
+              element.target.style.height = (element.target.scrollHeight)+"px";
+            }}
+          ></textarea>
         )}
       </Description>
+      {!adding &&
       <Comments>
-        {post.user_has_comment.length > 0 &&
-        <CommentsList>
-          {post.user_has_comment.map((comment, index) => {
-            return (
-              <Comment key={index}>
-                <img src={`https://res.cloudinary.com/drbc8fw3u/image/upload/v1659792735/${comment.users.avatar}`}></img>
-                <div>
-                  <p>
-                    <span>
-                      <Link href={`/profile/${comment.users.id}`}>{comment.users.username}</Link>
-                    </span>
-                  </p>
-                  <p>{comment.comments.content}</p>
-                </div>
-              </Comment>
-            )
-          })}
-        </CommentsList>}
-        {post.user_has_comment.length === 0 &&
+        {post.user_has_comment.length > 0 && (
+          <CommentsList>
+            {post.user_has_comment.map((comment, index) => {
+              return (
+                <Comment key={index}>
+                  <img
+                    src={`https://res.cloudinary.com/drbc8fw3u/image/upload/v1659792735/${comment.users.avatar}`}
+                  ></img>
+                  <div>
+                    <p>
+                      <span>
+                        <Link href={`/profile/${comment.users.id}`}>
+                          {comment.users.username}
+                        </Link>
+                      </span>
+                    </p>
+                    <p>{comment.comments.content}</p>
+                  </div>
+                </Comment>
+              )
+            })}
+          </CommentsList>
+        )}
+        {post.user_has_comment.length === 0 && (
           <p className="noComments">Aucun commentaire</p>
-        }
+        )}
         <CommentsForm onSubmit={handleSubmitComment}>
-          <textarea type="text" placeholder="Ajouter un commentaire..." name="comment" onChange={handleComment} rows="1"></textarea>
+          <textarea
+            type="text"
+            placeholder="Ajouter un commentaire..."
+            name="comment"
+            onChange={handleComment}
+            rows="1"
+          ></textarea>
           <button type="submit">
             <FontAwesomeIcon icon={faPaperPlane} size="xl" />
           </button>
         </CommentsForm>
-      </Comments>
+      </Comments>}
     </PostStyled>
   )
 }

@@ -17,19 +17,7 @@ const HeaderStyled = styled.div`
 
 export default function AddPost() {
   const { data: session, status } = useSession()
-  const [post, setPost] = useState({
-    userId: 0,
-    content: {
-      url: [],
-    },
-    description: "",
-    users: {
-      username: "",
-      avatar: "avatars/default",
-    },
-    nblike: null,
-    likes: [],
-  })
+  const [post, setPost] = useState()
 
   useEffect(() => {
     if (session) {
@@ -42,6 +30,7 @@ export default function AddPost() {
         users: session.user,
         nblike: null,
         likes: [],
+        user_has_comment: [],
       })
     }
   }, [session])
@@ -66,12 +55,15 @@ export default function AddPost() {
 
     formData.append("upload_preset", "festivapp-posts")
 
-    const data = await fetch("https://api.cloudinary.com/v1_1/drbc8fw3u/image/upload", {
-      method: "POST",
-      body: formData,
-    }).then((res) => res.json())
+    const data = await fetch(
+      "https://api.cloudinary.com/v1_1/drbc8fw3u/image/upload",
+      {
+        method: "POST",
+        body: formData,
+      }
+    ).then((res) => res.json())
 
-    post.description = document.querySelector(".customDescription").innerHTML
+    post.description = document.querySelector(".customDescription").value
     post.content.url = [data.public_id]
 
     // post.content.url = ["posts/test"]
@@ -97,7 +89,7 @@ export default function AddPost() {
       <Header />
       <HeaderStyled>
         <h1>Ajouter un post</h1>
-        <Button text="Publier" width="30%" onClick={handleAdd}/>
+        <Button text="Publier" width="30%" onClick={handleAdd} />
       </HeaderStyled>
       <Post post={post} adding={true} />
     </>
